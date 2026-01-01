@@ -274,7 +274,6 @@ def materials():
 @login_required
 def export_role_json(role_id):
     role = Role.query.filter_by(id=role_id, user_id=current_user.id).first_or_404()
-
     images_data = []
     for img in role.images:
         images_data.append({
@@ -287,7 +286,7 @@ def export_role_json(role_id):
             "filter": img.filter.name if img.filter else None,
             "image_file": img.image_file
         })
-
+    
     data = {
         "role_name": role.name,
         "film_manufacturer": role.film_manufacturer,
@@ -295,34 +294,7 @@ def export_role_json(role_id):
         "iso": role.iso,
         "images": images_data
     }
-
-    # JSON Response als Download
-    #resp = jsonify(data)
-    #resp.headers['Content-Disposition'] = f'attachment; filename=role_{role.id}_export.json'
-    #return resp
-
-    # Nur Rollen des aktuellen Benutzers
-    role = Role.query.filter_by(id=role_id, user_id=current_user.id).first_or_404()
     
-    images_data = []
-    for img in role.images:
-        images_data.append({
-            "frame_number": img.frame_number,
-            "filename": img.filename,
-            "shutter_speed": img.shutter_speed,
-            "aperture": img.aperture,
-            "camera": img.camera.name if img.camera else None,
-            "lens": img.lens.name if img.lens else None,
-            "filter": img.filter.name if img.filter else None,
-            "image_file": img.image_file
-        })
-    
-    data = {
-        "role_name": role.name,
-        "images": images_data
-    }
-    
-    # JSON in Response zurückgeben
     response = Response(json.dumps(data, indent=2), mimetype='application/json')
     response.headers['Content-Disposition'] = f'attachment; filename=role_{role.id}_export.json'
     return response
