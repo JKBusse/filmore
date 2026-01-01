@@ -1,6 +1,6 @@
 services:
   web:
-    image: ghcr.io/jkbusse/filmore:2017197029e9ef86e850ed67e1ba69a9dc10b401
+    image: ghcr.io/jkbusse/filmore:latest
     ports:
       - "5001:5001"
     volumes:
