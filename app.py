@@ -11,13 +11,18 @@ from models import db, User, Role, Image, Camera, Lens, Filter
 from forms import RoleForm, CameraForm, LensForm, FilterForm, ImageForm, LoginForm, RegisterForm
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = ''  # in prod: set via env var
-# Cookie hardening options (für Entwicklung: SESSION_COOKIE_SECURE=False wenn kein HTTPS)
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SECURE'] = True
-app.config['REMEMBER_COOKIE_HTTPONLY'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:///database.db')
+
+# helper to parse boolean-like env values
+def _str_to_bool(val):
+    return str(val).lower() in ('1', 'true', 'yes', 'on')
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = _str_to_bool(os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS', 'False'))
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret')  # in prod: set via env var
+# Cookie hardening options (für Entwicklung: set SESSION_COOKIE_SECURE=False wenn kein HTTPS)
+app.config['SESSION_COOKIE_HTTPONLY'] = _str_to_bool(os.getenv('SESSION_COOKIE_HTTPONLY', 'True'))
+app.config['SESSION_COOKIE_SECURE'] = _str_to_bool(os.getenv('SESSION_COOKIE_SECURE', 'False'))
+app.config['REMEMBER_COOKIE_HTTPONLY'] = _str_to_bool(os.getenv('REMEMBER_COOKIE_HTTPONLY', 'True'))
 
 db.init_app(app)
 
