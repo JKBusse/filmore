@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   web:
-    build: .
+    image: ghcr.io/jkbusse/filmore:2017197029e9ef86e850ed67e1ba69a9dc10b401
     ports:
       - "5001:5001"
     volumes:
@@ -18,7 +16,5 @@ services:
       - SESSION_COOKIE_HTTPONLY=True
       - SESSION_COOKIE_SECURE=False
       - REMEMBER_COOKIE_HTTPONLY=True
-    env_file:
-      - .env
     command: gunicorn --bind 0.0.0.0:5001 "app:app" --reload --workers 1
     restart: unless-stopped
