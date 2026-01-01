@@ -297,9 +297,9 @@ def export_role_json(role_id):
     }
 
     # JSON Response als Download
-    resp = jsonify(data)
-    resp.headers['Content-Disposition'] = f'attachment; filename=role_{role.id}_export.json'
-    return resp
+    #resp = jsonify(data)
+    #resp.headers['Content-Disposition'] = f'attachment; filename=role_{role.id}_export.json'
+    #return resp
 
     # Nur Rollen des aktuellen Benutzers
     role = Role.query.filter_by(id=role_id, user_id=current_user.id).first_or_404()
@@ -328,4 +328,4 @@ def export_role_json(role_id):
     return response
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    app.run(debug=True, host='127.0.0.0', port=5001)

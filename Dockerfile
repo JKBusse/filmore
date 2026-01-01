@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt && pip install gunicorn
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy app code
 COPY . /app
@@ -24,6 +24,3 @@ RUN mkdir -p /app/instance /app/static/uploads \
     && chown -R root:root /app
 
 EXPOSE 5001
-
-# Use Gunicorn as the production WSGI server
-CMD ["gunicorn", "--bind", "0.0.0.0:5001", "app:app", "--workers", "3"]

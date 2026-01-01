@@ -4,8 +4,6 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      # bind mount project for live development; remove for production
-      - .:/app
       - ./instance:/app/instance
       - ./static/uploads:/app/static/uploads
     environment:
@@ -16,5 +14,4 @@ services:
       - SESSION_COOKIE_HTTPONLY=True
       - SESSION_COOKIE_SECURE=False
       - REMEMBER_COOKIE_HTTPONLY=True
-    command: gunicorn --bind 0.0.0.0:5001 "app:app" --reload --workers 1
-    restart: unless-stopped
+    command: python3 app.py
